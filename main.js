@@ -47,3 +47,63 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+// resize square feature with arrows
+const MIN_SIZE = 20;
+const HANDLE_DIRS = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
+ 
+makeResizable(document.getElementById("test"));
+ 
+function makeResizable(el) {
+  // Show handles when the square is clicked, hide when clicking elsewhere
+  el.addEventListener("mousedown", () => el.classList.add("selected"));
+  document.addEventListener("mousedown", (e) => {
+    if (!el.contains(e.target)) el.classList.remove("selected");
+  });
+ 
+  HANDLE_DIRS.forEach((dir) => {
+    const h = document.createElement("div");
+    h.className = "resize-handle " + dir;
+    h.dataset.dir = dir;
+    h.addEventListener("mousedown", startResize);
+    el.appendChild(h);
+  });
+ 
+  function startResize(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    el.classList.add("selected");
+ 
+    const dir = e.target.dataset.dir;
+    const sx = e.clientX, sy = e.clientY;
+    const s = { left: el.offsetLeft, top: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight };
+ 
+    function onMove(e) {
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      let { left, top, w, h } = s;
+ 
+      if (dir.includes("e")) w = Math.max(MIN_SIZE, s.w + dx);
+      if (dir.includes("s")) h = Math.max(MIN_SIZE, s.h + dy);
+      if (dir.includes("w")) {
+        w = Math.max(MIN_SIZE, s.w - dx);
+        left = s.left + s.w - w; 
+      }
+      if (dir.includes("n")) {
+        h = Math.max(MIN_SIZE, s.h - dy);
+        top = s.top + s.h - h; 
+      }
+ 
+      el.style.width = w + "px";
+      el.style.height = h + "px";
+      el.style.left = left + "px";
+      el.style.top = top + "px";
+    }
+ 
+    function onUp() {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    }
+ 
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  }
+}
