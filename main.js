@@ -2,20 +2,10 @@
 dragElement(document.getElementById("test"));
 
 function dragElement(elmnt) {
-  var offsets;
-
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id)) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id).onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
+  elmnt.onmousedown = dragMouseDown;
 
   function dragMouseDown(e) {
-    offsets = elmnt.parentElement.getBoundingClientRect();
-    console.log(offsets);
     e = e || window.event;
     e.preventDefault();
     // get the mouse cursor position at startup:
@@ -30,8 +20,6 @@ function dragElement(elmnt) {
     e = e || window.event;
     e.preventDefault();
     // calculate the new cursor position:
-    console.log(`ClientX = ${e.clientX}`);
-    console.log(`ClientY = ${e.clientY}`);
     pos1 = pos3 - e.clientX;
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
@@ -47,3 +35,31 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+
+// Open the color picker when the square is clicked or dropped
+const square = document.getElementById("test");
+const colorPicker = document.getElementById("colorPicker");
+
+square.addEventListener("click", () => {
+  // move the hidden picker to the square so the popup opens next to it
+  colorPicker.style.top = square.offsetTop + "px";
+  colorPicker.style.left = square.offsetLeft + "px";
+  if (colorPicker.showPicker) {
+    colorPicker.showPicker();
+  } else {
+    colorPicker.click();
+  }
+});
+
+// Restore saved color on load
+const savedColor = localStorage.getItem("squareColor");
+if (savedColor) {
+  square.style.backgroundColor = savedColor;
+  colorPicker.value = savedColor;
+}
+
+// Update the square's color as you pick, and save it
+colorPicker.addEventListener("input", (e) => {
+  square.style.backgroundColor = e.target.value;
+  localStorage.setItem("squareColor", e.target.value);
+});
