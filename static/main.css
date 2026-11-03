@@ -261,3 +261,32 @@ video {
     }
 
 }
+
+
+.rectangle {
+  position: absolute;
+  box-sizing: border-box;
+  cursor: move;
+}
+.rectangle.selected { outline: 1px solid #1a73e8; }
+ 
+.resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 1px solid #1a73e8;
+  box-sizing: border-box;
+  display: none;
+}
+.rectangle.selected .resize-handle { display: block; }
+ 
+.resize-handle.nw { top: -5px;               left: -5px;               cursor: nwse-resize; }
+.resize-handle.n  { top: -5px;               left: calc(50% - 5px);    cursor: ns-resize; }
+.resize-handle.ne { top: -5px;               right: -5px;              cursor: nesw-resize; }
+.resize-handle.e  { top: calc(50% - 5px);    right: -5px;              cursor: ew-resize; }
+.resize-handle.se { bottom: -5px;            right: -5px;              cursor: nwse-resize; }
+.resize-handle.s  { bottom: -5px;            left: calc(50% - 5px);    cursor: ns-resize; }
+.resize-handle.sw { bottom: -5px;            left: -5px;               cursor: nesw-resize; }
+.resize-handle.w  { top: calc(50% - 5px);    left: -5px;               cursor: ew-resize; }
+ 
