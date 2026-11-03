@@ -40,4 +40,26 @@ function dragElement(elmnt) {
     document.onmouseup = null;
     document.onmousemove = null;
   }
-}
+
+  const square = document.getElementById("test");
+  const colorPicker = document.getElementById("colorPicker");
+
+  square.addEventListener("click", () => {
+
+   colorPicker.style.top = square.offsetTop + "px";
+   colorPicker.style.left = square.offsetLeft + "px";
+   
+   if(colorPicker.showPicker) {
+      colorPicker.showPicker();
+    } else {
+      colorPicker.click();
+    }
+  });
+
+  colorPicker.addEventListener("input", (e) =>{
+    square.style.backgroundColor = e.target.value;
+   }); 
+
+  }
+
+}       
